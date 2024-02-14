@@ -6,10 +6,10 @@ import BaseLayout from '../../layout/BaseLayout';
 
 const Publicite = () => {
   const [data, setData] = useState([]);
-  const [form, setForm] = useState({ file: null }); // Définir form comme un état avec une propriété "file"
+  const [form, setForm] = useState({ fichier: null }); // Définir form comme un état avec une propriété "file"
   const [message, setMessage] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [editForm, setEditForm] = useState({ id: '', file: null }); // Modifier pour inclure "file"
+  const [editForm, setEditForm] = useState({ id: '', fichier: null }); // Modifier pour inclure "file"
   const [showEditForm, setShowEditForm] = useState(false);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,14 +34,14 @@ const Publicite = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('file', form.file);
+    formData.append('fichier', form.fichier);
 
     axios.post(`http://185.98.139.246:9090/ogatemanagement-api/admin/enregistrerpublicite`, formData)
       .then(response => {
         setMessage({ text: 'Enregistré avec succès', type: 'success' });
         setShowForm(false);
         setTimeout(() => setMessage(null), 4000);
-        setForm({ file: null }); // Réinitialiser le formulaire après soumission
+        setForm({ fichier: null });
         fetchData();
       })
       .catch(error => {
@@ -51,17 +51,20 @@ const Publicite = () => {
       });
   };
 
+
   const handleEditSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('file', editForm.file);
+    formData.append('id', editForm.id); // Ajouter l'ID existant
+    formData.append('fichier', editForm.fichier);
+  
 
     try {
       await axios.post(`http://185.98.139.246:9090/ogatemanagement-api/admin/modifierpublicite`, formData);
       setMessage({ text: 'Modifié avec succès', type: 'success' });
       setShowEditForm(false);
       setTimeout(() => setMessage(null), 4000);
-      setEditForm({ id: '', file: null }); // Réinitialiser le formulaire après soumission
+      setEditForm({ id: '', fichier: null }); // Réinitialiser le formulaire après soumission
       fetchData();
     } catch (error) {
       setMessage({ text: 'Erreur lors de la modification', type: 'error' });
@@ -70,12 +73,13 @@ const Publicite = () => {
     }
   };
   const handleChange = (event) => {
-    setForm({ ...form, file: event.target.files[0] });
+    setForm({ ...form, fichier: event.target.files[0] });
   };
 
 
+
   const handleEditChange = (event) => {
-    setEditForm({ ...editForm, file: event.target.files[0] }); // Mettre à jour le fichier sélectionné pour la modification
+    setEditForm({ ...editForm, fichier: event.target.files[0] }); // Mettre à jour le fichier sélectionné pour la modification
   };
   const handleEdit = (item) => {
     setEditForm(item); // Utilisez setEditForm ici
@@ -132,7 +136,7 @@ const Publicite = () => {
             <p>{item.fichier.nom}</p>
           )}
           {item.fichier && item.fichier.typeFichier === 'IMAGE' && (
-            <img src={`http://185.98.139.246:9090${item.fichier.chemin}`} alt={item.fichier.nom} className="h-20 w-auto mx-auto" /> 
+            <img src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${item.fichier.id}`} alt={item.fichier.nom} className="h-20 w-auto mx-auto" /> 
           )}
         </td>
         <td className="border px-4 py-2 text-center" >
@@ -147,8 +151,7 @@ const Publicite = () => {
     ))
   ) : (
     <tr>
-      <td colSpan="3" className="border px-4 py-2 font-medium text-red-500 text-center">
-      </td>
+      <td colSpan="6" className="border px-4 py-2 font-medium text-red-500 text-center">Aucun élément trouvé</td>
     </tr>
   )
   )}
@@ -193,7 +196,7 @@ const Publicite = () => {
               <form className="py-4" onSubmit={handleEditSubmit}>
                 <div className="form-control w-full">
                   <label className="label">
-                    <span className="label-text">Désignation</span>
+                    <span className="label-text">Fichiers</span>
                   </label>
                   <input
                     type="file" // Utilisez le type "file" pour sélectionner un fichier

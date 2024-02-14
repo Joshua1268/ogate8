@@ -43,16 +43,16 @@ const Publications = () => {
               {publication.fichiers.map(fichier => (
                 <div key={fichier.id}>
                   {fichier.typeFichier === "IMAGE" && (
-                    <img src={`http://185.98.139.246:9090/ogatemanagement-api/admin/file/download/${fichier.id}`} alt={fichier.nom} className="max-w-full h-auto mb-2" />
+                    <img src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} alt={fichier.nom} className="max-w-full h-auto mb-2" />
                   )}
                   {fichier.typeFichier === "VIDEO" && (
                     <video controls className="max-w-full h-auto mb-2">
-                      <source src={`http://185.98.139.246:9090/ogatemanagement-api/admin/file/download/${fichier.id}`} type="video/mp4" />
+                      <source src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} type="video/mp4" />
                       Votre navigateur ne prend pas en charge la lecture de vidéos.
                     </video>
                   )}
                   {fichier.typeFichier === "DOCUMENT" && (
-                    <a href={`http://185.98.139.246:9090/ogatemanagement-api/admin/file/download/${fichier.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline mb-2 block">{fichier.nom}</a>
+                    <a href={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline mb-2 block">{fichier.nom}</a>
                   )}
                 </div>
               ))}

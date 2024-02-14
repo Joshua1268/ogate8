@@ -26,7 +26,7 @@ const Utilisateurs = () => {
     setIsLoading(true);
     axios.get(`http://185.98.139.246:9090/ogatemanagement-api/admin/rechercherlisteutilisateurs?page=${page}&param=&taille=20`) // Param est vide et taille est 20
       .then(response => {
-        setData(response.data.donnee.users); // Modifiez cette ligne pour extraire typebiens
+        setData(response.data.donnee.users); // Modifiez cette ligne pour extraire utilisateurs
         setIsLoading(false);
       })
       .catch(error => {
