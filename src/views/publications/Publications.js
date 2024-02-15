@@ -32,32 +32,37 @@ const Publications = () => {
             </svg>
           </div>
         ) : (
-          publications.map(publication => (
-            <div key={publication.id} className="mb-4">
-              <h2 className="text-xl font-semibold">{publication.description}</h2>
-              <p>Localisation: {publication.localisation}</p>
-              <p>Date de publication: {publication.datePublication}</p>
-              <p>Prix: {publication.prix}</p>
-          
-              {/* Affichage des fichiers */}
-              {publication.fichiers.map(fichier => (
-                <div key={fichier.id}>
-                  {fichier.typeFichier === "IMAGE" && (
-                    <img src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} alt={fichier.nom} className="max-w-full h-auto mb-2" />
-                  )}
-                  {fichier.typeFichier === "VIDEO" && (
-                    <video controls className="max-w-full h-auto mb-2">
-                      <source src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} type="video/mp4" />
-                      Votre navigateur ne prend pas en charge la lecture de vidéos.
-                    </video>
-                  )}
-                  {fichier.typeFichier === "DOCUMENT" && (
-                    <a href={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline mb-2 block">{fichier.nom}</a>
-                  )}
+          publications.map((publication, index) => (
+            <div key={index} className="flex flex-col items-center mb-4">
+              <div className="w-full max-w-2xl border border-gray-300 rounded p-4 mb-4">
+                <p>Prix: {publication.prix}</p>
+                <p>Date de publication: {publication.datePublication}</p>
+                <p>Localisation: {publication.localisation}</p>
+                <div className={`flex ${publication.fichiers.filter(fichier => fichier.typeFichier === "IMAGE").length > 1 ? 'overflow-x-auto' : ''}`}>
+                  {publication.fichiers.map((fichier, fileIndex) => (
+                    <div key={fileIndex} className={`flex-shrink-0 mr-4`}>
+                      {fichier.typeFichier === "IMAGE" && (
+                        <img
+                          src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`}
+                          alt={fichier.nom}
+                          className="w-64 h-64 object-cover rounded-lg"
+                        />
+                      )}
+                      {fichier.typeFichier === "VIDEO" && (
+                        <video className="w-64 h-64 object-cover rounded-lg" controls>
+                          <source src={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} type="video/mp4" />
+                          Votre navigateur ne supporte pas la lecture de vidéos.
+                        </video>
+                      )}
+                      {fichier.typeFichier === "DOCUMENT" && (
+                        <div className="p-4">
+                          <a href={`http://185.98.139.246:9090/ogatemanagement-api/fichier/${fichier.id}`} target="_blank" rel="noopener noreferrer" className="block text-blue-500 hover:underline overflow-x-auto">{fichier.nom}</a>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-              {/* Vous pouvez ajouter d'autres détails de la publication ici */}
-              <hr className="my-2" />
+              </div>
             </div>
           ))
         )}
